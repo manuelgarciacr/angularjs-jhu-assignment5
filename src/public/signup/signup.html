@@ -1,0 +1,82 @@
+<div class="container">
+    <div class="jumbotron formbox">
+        <div>
+            <h2 ng-if="!signup.info">SIGN UP Our newsletter</h2>
+            <h2 ng-if="!signup.user.firstname && signup.info">Not Signed Up Yet. <a ui-sref="public.signup">Sign up Now!</a></h2>
+            <form ng-if="signup.user.firstname || !signup.info" class="form-row" name='signupForm' novalidate  ng-keyup="signup.reset()" aria-describedby="dataHelp">
+                <div>
+                    <label for="firstname" class="form-label">First name</label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" ng-disabled="signup.info"
+                        ng-model="signup.user.firstname" required minlength="2" ng-maxlength="12">
+                    <span ng-if="(signupForm.firstname.$error.minlength 
+                            || signupForm.firstname.$error.required) && 
+                            signupForm.firstname.$touched">
+                        First name must be at least 2 characters long
+                    </span>
+                    <span ng-if="signupForm.firstname.$error.maxlength && 
+                            signupForm.firstname.$touched">
+                        First name must not be longer than 12 characters
+                    </span>
+                </div>
+                <div>
+                    <label for="lastname" class="form-label">Last name</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" ng-disabled="signup.info"
+                        ng-model="signup.user.lastname" required minlength="2" ng-maxlength="50">
+                    <span ng-if="(signupForm.lastname.$error.minlength 
+                        || signupForm.lastname.$error.required) && 
+                        signupForm.lastname.$touched">
+                        Last name must be at least 2 characters long
+                    </span>
+                    <span ng-if="signupForm.firstname.$error.maxlength && 
+                        signupForm.firstname.$touched">
+                        Last name must not be longer than 50 characters
+                    </span>
+                </div>
+                <div>
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" ng-disabled="signup.info" 
+                        ng-model="signup.user.email" required>
+                    <span ng-if="signupForm.email.$invalid && signupForm.email.$touched">
+                        Must be a valid email address: handle@domain format
+                    </span>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="phone" class="form-label">Phone number</label>
+                        <input type="text" class="form-control" id="phone" name="phone" ng-disabled="signup.info" 
+                            ng-model="signup.user.phone" pattern="(\d{3})-(\d{3})-(\d{4})">
+                        <span ng-if="signupForm.phone.$invalid && signupForm.phone.$touched">
+                            Phone must be in the format ###-###-####.
+                        </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="dish" class="form-label">Favorite dish code</label>
+                        <input type="text" class="form-control" id="dish" name="dish" ng-disabled="signup.info" 
+                            ng-model="signup.user.dish" dishcode autocomplete="off">
+                        <span ng-if="signupForm.dish.$pending.dishcode">
+                            Checking if the dish code exists ...
+                        </span>
+                        <span ng-if="signupForm.dish.$error.dishcode && 
+                            signupForm.firstname.$touched">
+                            Dish code does not exists
+                        </span>
+                    </div>
+                </div>
+                <div ng-if="signup.info" class="row">
+                    <div class="col-sm-6">
+                        <img class="img-responsive" width="250" height="150" ng-src="{{signup.apiPath}}/images/{{signup.user.dish}}.jpg" alt="{{signup.user.name}}">
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>{{ signup.user.name }}</h4>
+                        <h5>{{ signup.user.description }}</h5>
+                    </div>
+                </div>
+                <h2 ng-if="signup.completed">Your information has been saved</h2>
+                <button ng-if="!signup.info" class="btn btn-primary" ng-disabled="signupForm.$invalid || signupForm.$pending"
+                    ng-click="signup.submit()">Save
+                    Data</button>
+            </form>
+            <div id="dataHelp" class="form-text">We'll never share your data with anyone else.</div>
+        </div>
+    </div>
+</div>
